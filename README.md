@@ -1,130 +1,75 @@
-# Simpson-Regularized Harmonic Sum and Delta Estimation
+# Simpson-Type Decomposition of the Euler-Mascheroni Constant
 
-This repository provides a Python implementation for computing a Simpson-regularized approximation of the harmonic sum and estimating the constant
+This repository contains the source code used in the paper
 
-\[
-\delta = \gamma - \left(\frac{\log 2}{3} + \frac{1}{3}\right),
-\]
+    "A Simpson-Type Decomposition of the Euler-Mascheroni Constant"
 
-where \(\gamma\) is the Euler–Mascheroni constant.
+and provides scripts to reproduce all numerical results reported in the manuscript.
 
----
-
-## Overview
+## Simpson-Type Approximation
 
 We define the local Simpson weight
 
 \[
-g(k) = \frac{1}{3}
-\left(
+g(k)=\frac{1}{3}\left(
 \frac{1}{2k-1}
-+
-\frac{4}{2k}
-+
-\frac{1}{2k+1}
++\frac{4}{2k}
++\frac{1}{2k+1}
 \right),
 \]
 
-which corresponds to Simpson's rule on the interval \([2k-1, 2k+1]\).
+which corresponds to Simpson's rule applied to the interval
+\([2k-1,\,2k+1]\).
 
-Using this, we construct a global approximation \(h(N)\):
+Using these local weights, we define the global approximation \(h(N)\).
 
-- For odd \(N\):
+For odd \(N\),
 
 \[
-h(N) = \sum_{k=1}^{\frac{N-1}{2}} g(k)
+h(N)=\sum_{k=1}^{(N-1)/2} g(k).
 \]
 
-- For even \(N\):
+For even \(N\),
 
 \[
-h(N) = h(N-1) +
+h(N)
+=
+h(N-1)
++
 \frac{1}{6}
 \left(
 \frac{1}{N-1}
 +
-\frac{4}{N - \tfrac{1}{2}}
+\frac{4}{N-\tfrac12}
 +
 \frac{1}{N}
+\right).
+\]
+
+The main result of the paper is that
+
+\[
+\lim_{N\to\infty}
+\left(
+h(N)-\log N
 \right)
+=
+\gamma,
 \]
 
----
+where \(\gamma\) denotes the Euler-Mascheroni constant.
 
-## Delta Approximation
+## Contents
 
-We estimate
+- `newTable2.py`
+  
+  Reproduces Table 2 of the manuscript, including both odd and even values of \(N\), and evaluates their convergence behavior.
 
-\[
-a(N) = 2h(N) - h(N^2).
-\]
+- `newTable3.py`
+  
+  Reproduces Table 3 of the manuscript and compares the convergence rates of the proposed Simpson-type approximation with previously published approximations to \(\gamma\).
 
-This quantity converges to \(\delta\) as \(N \to \infty\).
+## Reproducibility
 
----
+All numerical values reported in Tables 2 and 3 can be reproduced directly from the scripts included in this repository.
 
-## Error Bound
-
-We define an upper bound \(r(N)\) as:
-
-- If \(N\) is odd:
-
-\[
-r(N) = \frac{1}{15 (N-1)^4}
-\]
-
-- If \(N\) is even:
-
-\[
-r(N) =
-\frac{1}{15 (N-2)^4}
-+
-\frac{1}{120 (N-1)^5}.
-\]
-
----
-
-## Output
-
-The script outputs tab-separated values with the following columns:
-
-| N | a(N) | delta-a(N) | r(N) | 
-|---|------|------------|------|
-| 3 | 0.012169312 | 0.000663959 | 0.004166667 | 
-| 4 | 0.012197696 | 0.000635575 | 0.004200960 | 
-| 5 | 0.012735433 | 0.000097838 | 0.000260417 | 
-| 6 | 0.012738721 | 0.000094550 | 0.000263083 | 
-| 7 | 0.012806754 | 0.000026518 | 0.000051440 | 
-| 8 | 0.012807457 | 0.000025814 | 0.000051936 | 
-| 9 | 0.012823395 | 0.000009877 | 0.000016276 | 
-| 10 | 0.012823611 | 0.000009661 | 0.000016417 | 
-| 11 | 0.012828805 | 0.000004467 | 0.000006667 | 
-| 12 | 0.012828888 | 0.000004384 | 0.000006718 | 
-| 13 | 0.012830969 | 0.000002302 | 0.000003215 | 
-| 14 | 0.012831007 | 0.000002265 | 0.000003237 | 
-| 15 | 0.012831968 | 0.000001303 | 0.000001735 | 
-| 16 | 0.012831987 | 0.000001285 | 0.000001746 | 
-| 17 | 0.012832480 | 0.000000792 | 0.000001017 | 
-| 18 | 0.012832490 | 0.000000782 | 0.000001023 | 
-| 19 | 0.012832763 | 0.000000508 | 0.000000635 | 
-| 20 | 0.012832769 | 0.000000502 | 0.000000638 | 
-| 21 | 0.012832930 | 0.000000341 | 0.000000417 | 
-| 22 | 0.012832934 | 0.000000337 | 0.000000419 | 
-| 23 | 0.012833034 | 0.000000237 | 0.000000285 | 
-| 24 | 0.012833037 | 0.000000235 | 0.000000286 | 
-| 25 | 0.012833101 | 0.000000170 | 0.000000201 | 
-| 26 | 0.012833103 | 0.000000168 | 0.000000202 | 
-| 27 | 0.012833146 | 0.000000125 | 0.000000146 | 
-| 28 | 0.012833147 | 0.000000124 | 0.000000146 | 
-| 29 | 0.012833177 | 0.000000094 | 0.000000108 | 
-| 30 | 0.012833178 | 0.000000093 | 0.000000109 | 
-| 31 | 0.012833199 | 0.000000072 | 0.000000082 | 
-| 32 | 0.012833200 | 0.000000071 | 0.000000083 | 
-| 33 | 0.012833215 | 0.000000056 | 0.000000064 | 
-| 34 | 0.012833216 | 0.000000056 | 0.000000064 | 
-| 35 | 0.012833227 | 0.000000044 | 0.000000050 | 
-| 36 | 0.012833227 | 0.000000044 | 0.000000050 | 
-| 37 | 0.012833236 | 0.000000036 | 0.000000040 | 
-| 38 | 0.012833236 | 0.000000035 | 0.000000040 | 
-| 39 | 0.012833243 | 0.000000029 | 0.000000032 | 
-| 40 | 0.012833243 | 0.000000029 | 0.000000032 | 
